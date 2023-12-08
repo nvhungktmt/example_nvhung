@@ -27,6 +27,12 @@ class MatchDBLocal {
     return m;
   }
 
+  addAll(List<MatchDB> l) {
+    realm.write(() {
+      realm.addAll(l);
+    });
+  }
+
   addPlayer(MatchDB match, PlayerDB p) async {
     match.t1.add(await match.getDetail(p));
   }
@@ -39,15 +45,16 @@ class MatchDBLocal {
 
   int get id => DateTime.now().microsecondsSinceEpoch;
 
-  addAll(List<MatchDB> list) {
-    for (var l in list) {
-      add(l);
-    }
-  }
+  // addAll(List<MatchDB> list) {
+  //   for (var l in list) {
+  //     add(l);
+  //   }
+  // }
 
   deleteAll() {
     realm.write(() {
       realm.deleteAll<MatchDB>();
+      realm.deleteAll<MatchDetailDB>();
     });
   }
 

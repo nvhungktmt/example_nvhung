@@ -30,6 +30,12 @@ class PlayerDBLocal {
     });
   }
 
+  addAll(List<PlayerDB> l) {
+    realm.write(() {
+      realm.addAll(l);
+    });
+  }
+
   deleteAll() {
     realm.write(() {
       realm.deleteAll<PlayerDB>();

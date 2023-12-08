@@ -10,6 +10,7 @@ class MoreView extends StatefulWidget {
 
 class _MoreViewState extends State<MoreView> {
   bool _isConnect = false;
+  String _text = '';
   @override
   void initState() {
     // TODO: implement initState
@@ -23,22 +24,23 @@ class _MoreViewState extends State<MoreView> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
+        Text(_text),
         TextButton(
             onPressed: () async {
+              _text = 'Đang đồng bộ';
+              setState(() {});
               await FirebaseAPI.connect;
-              var text = 'A';
-              for (var i = 0; i < 100000; i++) {
-                text += '$i';
-              }
-              text += 'Z';
-              FirebaseAPI.writeNewPost(text);
+
+              final suc = await FirebaseAPI.writeNewPost();
+              _text = suc ? 'Đồng bộ thành công' : 'Đồng bộ thất bại';
+              setState(() {});
             },
-            child: Text('Save')),
+            child: Text('Đồng bộ dữ liệu')),
         TextButton(
             onPressed: () async {
               FirebaseAPI.getData();
             },
-            child: Text('Get')),
+            child: Text('Lấy dữ liệu mới nhất')),
       ],
     );
   }
