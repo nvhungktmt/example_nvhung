@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:random/views/match_list/match_list_view.dart';
+import 'package:random/views/mores/more_view.dart';
 import 'package:random/views/player/player_list_view.dart';
 import 'package:random/views/random/random_view.dart';
 import 'package:random/views/select_player/select_player_view.dart';
@@ -88,9 +89,7 @@ class _TabBarExampleState extends State<TabBarExample> with TickerProviderStateM
           Center(
             child: Text("It's sunny here"),
           ),
-          Center(
-            child: Text("It's sunny here"),
-          ),
+          MoreView(),
         ],
       ),
     );
