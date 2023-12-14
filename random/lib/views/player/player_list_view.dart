@@ -120,6 +120,8 @@ class PlayerListView extends StatelessWidget {
         if (i == 1) {
           PlayerDBLocal.shared.delete(item);
           controller.reloadData();
+        } else if (i == 0) {
+          controller.onEdit(item);
         }
         // setState(() {
         //   selectedMenu = item;

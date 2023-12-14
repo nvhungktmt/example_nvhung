@@ -1,3 +1,4 @@
+import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:random/commons/num_extension.dart';
 import 'package:random/models/db/match_db.dart';
 import 'package:random/models/db/player_db.dart';
@@ -191,6 +192,17 @@ class MatchDBLocal {
         p?.elo = (p.elo ?? 0) + getElo(m, d);
         p?.match = p.match.value + 1;
         m.details.add(d);
+      }
+    });
+  }
+
+  void editName(String name, PlayerDB item) {
+    final details = realm.query<MatchDetailDB>(r'pid == $0', [item.id]).toList();
+    final p = realm.find<PlayerDB>(item.id);
+    realm.write(() {
+      p?.name = name;
+      for (var d in details) {
+        d.pName = name;
       }
     });
   }

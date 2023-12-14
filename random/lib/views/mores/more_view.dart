@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:random/firebase/firebase_api_connect.dart';
 
 class MoreView extends StatefulWidget {
@@ -38,10 +39,33 @@ class _MoreViewState extends State<MoreView> {
             child: Text('Đồng bộ dữ liệu')),
         TextButton(
             onPressed: () async {
-              FirebaseAPI.getData();
+              _showAlert(context);
             },
             child: Text('Lấy dữ liệu mới nhất')),
       ],
     );
+  }
+
+  _showAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text('Dữ liệu cũ trên máy sẽ mất. Bạn có chắc chắn không?'),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text('Không')),
+          TextButton(
+              onPressed: () {
+                FirebaseAPI.getData();
+                Get.back();
+              },
+              child: Text('Có'))
+        ],
+      ),
+    );
+    FirebaseAPI.getData();
   }
 }

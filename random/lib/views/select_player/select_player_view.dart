@@ -3,16 +3,18 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:random/commons/app_styles.dart';
 import 'package:random/local/player_local.dart';
 import 'package:random/models/db/player_db.dart';
+import 'package:random/models/ui/player.dart';
 import 'package:random/views/player/player_list_controller.dart';
 import 'package:random/views/select_player/select_player_controller.dart';
 
 class SelectPlayerView extends StatelessWidget {
-  const SelectPlayerView({Key? key}) : super(key: key);
+  const SelectPlayerView({Key? key, this.selectedPlayers}) : super(key: key);
+  final List<PlayerDB>? selectedPlayers;
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<SelectPlayerController>(
-      init: SelectPlayerController(),
+      init: SelectPlayerController(selected: selectedPlayers),
       builder: (controller) {
         return Scaffold(
           appBar: AppBar(

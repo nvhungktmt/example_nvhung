@@ -19,6 +19,7 @@ class _ItemRandomViewState extends State<ItemRandomView> {
   List<_Entity> _players = [];
   List<_Entity> _selectplayers = [];
   _Entity? _player;
+  List<PlayerDB>? _playerDBs;
   @override
   void initState() {
     super.initState();
@@ -57,8 +58,9 @@ class _ItemRandomViewState extends State<ItemRandomView> {
                   icon: Icon(Icons.add_circle)),
               TextButton(
                   onPressed: () {
-                    Get.to(SelectPlayerView())?.then((value) {
+                    Get.to(SelectPlayerView(selectedPlayers: _playerDBs))?.then((value) {
                       if (value is List<PlayerDB>) {
+                        _playerDBs = value;
                         _players = value.map((e) => _Entity(value: 0, data: e)).toList();
                         _player = _players.firstOrNull;
                         _max = _players.length;
@@ -121,7 +123,7 @@ class _ItemRandomViewState extends State<ItemRandomView> {
               },
               child: Container(
                 height: 50,
-                width: 50,
+                width: 66,
                 margin: const EdgeInsets.all(8),
                 color: !item.isShow
                     ? Colors.lightBlue

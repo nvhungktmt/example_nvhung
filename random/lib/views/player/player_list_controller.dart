@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:random/commons/num_extension.dart';
+import 'package:random/local/match_local.dart';
 import 'package:random/local/player_local.dart';
+import 'package:random/models/db/match_db.dart';
 import 'package:random/models/db/player_db.dart';
 // import 'package:random/commons/num_extension.dart';
 
@@ -47,5 +49,34 @@ class PlayerListController extends GetxController {
     final allPlayer = PlayerDBLocal.shared.alls;
 
     players.value = allPlayer;
+  }
+
+  void onEdit(PlayerDB item) {
+    final name = TextEditingController();
+    name.text = item.name;
+    showDialog(
+        context: Get.context!,
+        builder: (c) => AlertDialog(
+              title: Text('Sửa thành viên'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: name,
+                    decoration: InputDecoration(labelText: 'Họ và tên*'),
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        if (name.text.trim().isNotEmpty) {
+                          MatchDBLocal.shared.editName(name.text.trim(), item);
+                          reloadData();
+                          Get.back();
+                          // Navigator.of(context).pop();
+                        }
+                      },
+                      child: Text('Xong'))
+                ],
+              ),
+            ));
   }
 }

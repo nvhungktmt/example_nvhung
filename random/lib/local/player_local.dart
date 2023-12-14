@@ -52,6 +52,9 @@ class PlayerDBLocal {
     final allPlayer = realm.all<PlayerDB>().toList();
     allPlayer.sort((p1, p2) {
       if (p1.isFavourite == p2.isFavourite) {
+        if (p1.elo == p2.elo) {
+          return p1.goal.value >= p2.goal.value ? 0 : 1;
+        }
         return p1.elo.value >= p2.elo.value ? 0 : 1;
       }
       return p1.isFavourite == true
