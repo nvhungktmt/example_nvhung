@@ -1,34 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:random/commons/app_card.dart';
 import 'package:random/commons/app_color.dart';
 import 'package:random/commons/app_styles.dart';
 import 'package:random/commons/num_extension.dart';
-import 'package:random/local/player_local.dart';
-import 'package:random/models/db/player_db.dart';
 import 'package:random/views/player/details/player_detail_view.dart';
-import 'package:random/views/player/player_list_controller.dart';
+import 'package:random/views/ranking/rank_list_controller.dart';
 
-class PlayerListView extends StatelessWidget {
-  const PlayerListView({Key? key}) : super(key: key);
+class RankListView extends StatelessWidget {
+  const RankListView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<PlayerListController>(
-      init: PlayerListController(),
+    return GetBuilder<RankListController>(
+      init: RankListController(),
       builder: (controller) {
         return Scaffold(
           backgroundColor: AppColors.background,
           appBar: AppBar(
             backgroundColor: Colors.white,
-            title: const Text('Thành viên'),
+            title: const Text('Xếp hạng theo'),
             actions: [
-              IconButton(
+              TextButton(
                   onPressed: () {
-                    controller.onAdd(context);
+                    controller.changeSort();
                   },
-                  icon: const Icon(Icons.add_circle))
+                  child: Obx(() => Text(controller.sortBy.value.value)))
             ],
           ),
           body: Obx(() => ListView.separated(
@@ -65,18 +62,6 @@ class PlayerListView extends StatelessWidget {
                               item.name,
                               style: AppStyle.large,
                             )),
-                            IconButton(
-                                onPressed: () {
-                                  PlayerDBLocal.shared.realm.write(() {
-                                    item.isFavourite = !(item.isFavourite ?? false);
-                                  });
-                                  controller.reloadData();
-                                },
-                                icon: Icon(
-                                  Icons.favorite_border_rounded,
-                                  color: item.isFavourite == true ? Colors.red : Colors.grey,
-                                )),
-                            if (item.isFavourite == false) moreItem(controller, item),
                           ],
                         ),
                         Row(
@@ -128,37 +113,6 @@ class PlayerListView extends StatelessWidget {
               itemCount: controller.players.value.length)),
         );
       },
-    );
-  }
-
-  Widget moreItem(PlayerListController controller, PlayerDB item) {
-    return PopupMenuButton<int>(
-      // initialValue: 0,
-      // Callback that sets the selected popup menu item.
-      onSelected: (int i) {
-        if (i == 1) {
-          PlayerDBLocal.shared.delete(item);
-          controller.reloadData();
-        } else if (i == 0) {
-          controller.onEdit(item);
-        }
-        // setState(() {
-        //   selectedMenu = item;
-        // });
-      },
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
-        const PopupMenuItem<int>(
-          value: 0,
-          child: Text('Sửa'),
-        ),
-        PopupMenuItem<int>(
-          value: 1,
-          child: Text(
-            'Xóa',
-            style: AppStyle.normal.copyWith(color: Colors.red),
-          ),
-        ),
-      ],
     );
   }
 }

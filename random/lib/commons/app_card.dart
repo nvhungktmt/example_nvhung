@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class AppCard extends StatelessWidget {
   final Widget? child;
   final GestureTapCallback? onTap;
-  const AppCard({Key? key, this.child, this.onTap}) : super(key: key);
+  final EdgeInsets? padding;
+  const AppCard({Key? key, this.child, this.onTap, this.padding}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class AppCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             onTap: onTap,
             child: Container(
-              padding: const EdgeInsets.all(15.0),
+              padding: padding ?? const EdgeInsets.all(15.0),
               child: child,
             ),
           ),
