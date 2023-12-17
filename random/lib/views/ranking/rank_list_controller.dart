@@ -1,11 +1,16 @@
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:random/local/player_local.dart';
 import 'package:random/models/db/player_db.dart';
 import 'package:random/commons/num_extension.dart';
+import 'package:share_plus/share_plus.dart';
 // import 'package:random/commons/num_extension.dart';
 
-class RankListController extends GetxController {
+class RankListController extends GetxController with ShareMixin {
   var players = <PlayerDB>[].obs;
   var sortBy = ERankSort.elo.obs;
   var allPlayer = <PlayerDB>[];
@@ -93,4 +98,21 @@ enum ERankSort {
 
   const ERankSort(this.value);
   final String value;
+}
+
+mixin ShareMixin {
+  share() async {
+    final bytes = await _capturePng();
+    Share.shareXFiles([XFile.fromData(bytes, mimeType: ".png", name: "image1")]);
+  }
+
+  GlobalKey globalKey = GlobalKey();
+
+  Future<Uint8List> _capturePng() async {
+    RenderRepaintBoundary boundary = globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    ui.Image image = await boundary.toImage();
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    Uint8List pngBytes = byteData!.buffer.asUint8List();
+    return pngBytes;
+  }
 }

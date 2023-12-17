@@ -6,10 +6,11 @@ import 'package:random/models/db/match_db.dart';
 import 'package:random/models/db/player_db.dart';
 
 import 'package:random/views/add_match/add_match_state.dart';
+import 'package:random/views/ranking/rank_list_controller.dart';
 import 'package:random/views/select_player/select_player_view.dart';
 import 'package:realm/realm.dart';
 
-class AddMatchController extends GetxController {
+class AddMatchController extends GetxController with ShareMixin {
   AddMatchState state;
   final date = DateTime.now().obs;
   final t1 = <MatchDetailDB>[].obs;

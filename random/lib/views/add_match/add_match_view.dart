@@ -28,55 +28,69 @@ class AddMatchView extends StatelessWidget {
             actions: [
               IconButton(
                   onPressed: () {
+                    controller.share();
+                  },
+                  icon: const Icon(Icons.share_rounded)),
+              IconButton(
+                  onPressed: () {
                     controller.onSave();
                   },
                   icon: const Icon(Icons.done))
             ],
           ),
           body: ListView(
-            padding: EdgeInsets.all(10),
             children: [
-              AppCard(
-                onTap: () {
-                  controller.changeDate();
-                },
-                child: Row(
+              RepaintBoundary(
+                key: controller.globalKey,
+                child: ListView(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.all(10),
                   children: [
-                    const Expanded(child: Text('Ngày')),
-                    Obx(() => Text(DateFormat('dd/MM/yyyy').format(controller.date.value))),
+                    AppCard(
+                      onTap: () {
+                        controller.changeDate();
+                      },
+                      child: Row(
+                        children: [
+                          const Expanded(child: Text('Ngày')),
+                          Obx(() => Text(DateFormat('dd/MM/yyyy').format(controller.date.value))),
+                        ],
+                      ),
+                    ),
+                    Obx(() => AppCard(
+                          child: _TeamView(
+                            team: controller.t1.value,
+                            onAddPressed: () {
+                              controller.onAddT1();
+                            },
+                            onPressed: (e) {
+                              controller.edit(e);
+                            },
+                            title: 'Đội 1 - Bàn thắng:  ${controller.goal1.value}',
+                          ),
+                        )),
+                    Obx(() => AppCard(
+                          child: _TeamView(
+                            team: controller.t2.value,
+                            onAddPressed: () {
+                              controller.onAddT2();
+                            },
+                            onPressed: (e) {
+                              controller.edit(e);
+                            },
+                            title: 'Đội 2 - Bàn thắng:  ${controller.goal2.value}',
+                          ),
+                        )),
+                    Container(height: 30),
+                    TextButton(
+                        onPressed: () {
+                          controller.onClickDelete();
+                        },
+                        child: Text('Xóa'))
                   ],
                 ),
               ),
-              Obx(() => AppCard(
-                    child: _TeamView(
-                      team: controller.t1.value,
-                      onAddPressed: () {
-                        controller.onAddT1();
-                      },
-                      onPressed: (e) {
-                        controller.edit(e);
-                      },
-                      title: 'Đội 1 - Bàn thắng:  ${controller.goal1.value}',
-                    ),
-                  )),
-              Obx(() => AppCard(
-                    child: _TeamView(
-                      team: controller.t2.value,
-                      onAddPressed: () {
-                        controller.onAddT2();
-                      },
-                      onPressed: (e) {
-                        controller.edit(e);
-                      },
-                      title: 'Đội 2 - Bàn thắng:  ${controller.goal2.value}',
-                    ),
-                  )),
-              Container(height: 30),
-              TextButton(
-                  onPressed: () {
-                    controller.onClickDelete();
-                  },
-                  child: Text('Xóa'))
             ],
           ),
         );
