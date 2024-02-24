@@ -2,6 +2,7 @@ import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:random/commons/num_extension.dart';
 import 'package:random/models/db/match_db.dart';
 import 'package:random/models/db/player_db.dart';
+import 'package:random/models/ui/match.dart';
 import 'package:random/models/ui/player.dart';
 import 'package:realm/realm.dart';
 
@@ -67,63 +68,75 @@ class MatchDBLocal {
       m.goal2 = t2.fold<int>(0, (previousValue, element) => previousValue + element.goal) + t1.fold<int>(0, (previousValue, element) => previousValue + element.ogoal);
       realm.add(m);
     });
-    realm.write(() {
-      for (var d in m.details) {
-        final p = realm.find<PlayerDB>(d.pid);
-        d.win = getWin(m, d);
-        d.elo = getElo(m, d);
-        p?.goal = (p.goal ?? 0) + d.goal;
-        p?.ogoal = (p.ogoal ?? 0) + d.ogoal;
-        p?.assit = (p.assit ?? 0) + d.assit.value;
-        p?.win = (p.win ?? 0) + (d.win == 1 ? 1 : 0);
-        p?.lost = (p.lost ?? 0) + (d.win == -1 ? 1 : 0);
-        p?.elo = (p.elo ?? 0) + d.elo;
-        p?.match = p.match.value + 1;
-      }
-    });
+    if (m.isGH != 1) {
+      realm.write(() {
+        for (var d in m.details) {
+          final p = realm.find<PlayerDB>(d.pid);
+          d.win = getWin(m, d);
+          d.elo = getElo(m, d);
+          p?.goal = (p.goal ?? 0) + d.goal;
+          p?.ogoal = (p.ogoal ?? 0) + d.ogoal;
+          p?.assit = (p.assit ?? 0) + d.assit.value;
+          p?.win = (p.win ?? 0) + (d.win == 1 ? 1 : 0);
+          p?.lost = (p.lost ?? 0) + (d.win == -1 ? 1 : 0);
+          p?.elo = (p.elo ?? 0) + d.elo;
+          p?.match = p.match.value + 1;
+        }
+      });
+    }
   }
 
 //Update MatchDB, Player khi thay doi MatchDetailDB
-  update(MatchDB m) {
-    realm.write(() {
-      final t1 = m.details.where((e) => e.team == 1);
-      final t2 = m.details.where((e) => e.team == 2);
-      m.goal1 = t1.fold<int>(0, (previousValue, element) => previousValue + element.goal) + t2.fold<int>(0, (previousValue, element) => previousValue + element.ogoal);
-      m.goal2 = t2.fold<int>(0, (previousValue, element) => previousValue + element.goal) + t1.fold<int>(0, (previousValue, element) => previousValue + element.ogoal);
+  update(MatchDB m, int isGH) {
+    final mt = Match.fromDb(m).toDB();
+    delete(m);
+    mt.isGH = isGH;
+    for (var e in mt.details) {
+      e.isGH = isGH;
+    }
+    add(mt);
+    // realm.write(() {
+    //   final t1 = m.details.where((e) => e.team == 1);
+    //   final t2 = m.details.where((e) => e.team == 2);
+    //   m.goal1 = t1.fold<int>(0, (previousValue, element) => previousValue + element.goal) + t2.fold<int>(0, (previousValue, element) => previousValue + element.ogoal);
+    //   m.goal2 = t2.fold<int>(0, (previousValue, element) => previousValue + element.goal) + t1.fold<int>(0, (previousValue, element) => previousValue + element.ogoal);
 
-      for (var d in m.details) {
-        final win = d.win.value;
-        final elo = d.elo;
-        final goal = d.goal;
-        final ogoal = d.ogoal;
-        final assit = d.assit.value;
+    //   if (m.isGH != 1) {
+    //     for (var d in m.details) {
+    //       final win = d.win.value;
+    //       final elo = d.elo;
+    //       final goal = d.goal;
+    //       final ogoal = d.ogoal;
+    //       final assit = d.assit.value;
 
-        d.win = getWin(m, d);
-        d.elo = getElo(m, d);
-        final p = realm.find<PlayerDB>(d.pid);
-        p?.goal = (p.goal ?? 0) - goal + d.goal;
-        p?.ogoal = (p.ogoal ?? 0) - ogoal + d.ogoal;
-        p?.assit = (p.assit ?? 0) - assit + d.assit.value;
-        p?.win = (p.win ?? 0) - (win == 1 ? 1 : 0) + (d.win == 1 ? 1 : 0);
-        p?.lost = (p.lost ?? 0) - (win == -1 ? 1 : 0) + (d.win == -1 ? 1 : 0);
-        p?.elo = (p.elo ?? 0) - elo + d.elo;
-      }
-    });
+    //       d.win = getWin(m, d);
+    //       d.elo = getElo(m, d);
+    //       final p = realm.find<PlayerDB>(d.pid);
+    //       p?.goal = (p.goal ?? 0) - goal + d.goal;
+    //       p?.ogoal = (p.ogoal ?? 0) - ogoal + d.ogoal;
+    //       p?.assit = (p.assit ?? 0) - assit + d.assit.value;
+    //       p?.win = (p.win ?? 0) - (win == 1 ? 1 : 0) + (d.win == 1 ? 1 : 0);
+    //       p?.lost = (p.lost ?? 0) - (win == -1 ? 1 : 0) + (d.win == -1 ? 1 : 0);
+    //       p?.elo = (p.elo ?? 0) - elo + d.elo;
+    //     }
+    //   }
+    // });
   }
 
   delete(MatchDB m) {
-    final d = realm.all<MatchDetailDB>();
     final details = realm.query<MatchDetailDB>(r'mid == $0', [m.id]).toList();
     realm.write(() {
-      for (var d in details) {
-        final p = realm.find<PlayerDB>(d.pid);
-        p?.goal = (p.goal ?? 0) - d.goal;
-        p?.ogoal = (p.ogoal ?? 0) - d.ogoal;
-        p?.assit = (p.assit ?? 0) - d.assit.value;
-        p?.win = (p.win ?? 0) - (getWin(m, d) == 1 ? 1 : 0);
-        p?.lost = (p.lost ?? 0) - (getWin(m, d) == -1 ? 1 : 0);
-        p?.elo = (p.elo ?? 0) - getElo(m, d);
-        p?.match = p.match.value - 1;
+      if (m.isGH != 1) {
+        for (var d in details) {
+          final p = realm.find<PlayerDB>(d.pid);
+          p?.goal = (p.goal ?? 0) - d.goal;
+          p?.ogoal = (p.ogoal ?? 0) - d.ogoal;
+          p?.assit = (p.assit ?? 0) - d.assit.value;
+          p?.win = (p.win ?? 0) - (getWin(m, d) == 1 ? 1 : 0);
+          p?.lost = (p.lost ?? 0) - (getWin(m, d) == -1 ? 1 : 0);
+          p?.elo = (p.elo ?? 0) - getElo(m, d);
+          p?.match = p.match.value - 1;
+        }
       }
     });
     realm.write(() {
@@ -150,14 +163,16 @@ class MatchDBLocal {
 
   void deleteDetail(MatchDetailDB d, MatchDB m) {
     MatchDBLocal.shared.realm.write(() {
-      final p = realm.find<PlayerDB>(d.pid);
-      p?.goal = (p.goal ?? 0) - d.goal;
-      p?.ogoal = (p.ogoal ?? 0) - d.ogoal;
-      p?.assit = (p.assit ?? 0) - d.assit.value;
-      p?.win = (p.win ?? 0) - (getWin(m, d) == 1 ? 1 : 0);
-      p?.lost = (p.lost ?? 0) - (getWin(m, d) == -1 ? 1 : 0);
-      p?.elo = (p.elo ?? 0) - getElo(m, d);
-      p?.match = p.match.value - 1;
+      if (d.isGH != 1) {
+        final p = realm.find<PlayerDB>(d.pid);
+        p?.goal = (p.goal ?? 0) - d.goal;
+        p?.ogoal = (p.ogoal ?? 0) - d.ogoal;
+        p?.assit = (p.assit ?? 0) - d.assit.value;
+        p?.win = (p.win ?? 0) - (getWin(m, d) == 1 ? 1 : 0);
+        p?.lost = (p.lost ?? 0) - (getWin(m, d) == -1 ? 1 : 0);
+        p?.elo = (p.elo ?? 0) - getElo(m, d);
+        p?.match = p.match.value - 1;
+      }
       MatchDBLocal.shared.realm.delete(d);
     });
   }
@@ -166,14 +181,16 @@ class MatchDBLocal {
     MatchDBLocal.shared.realm.write(() {
       d.win = getWin(m, d);
       d.elo = getElo(m, d);
-      final p = realm.find<PlayerDB>(d.pid);
-      p?.goal = (p.goal ?? 0) + d.goal;
-      p?.ogoal = (p.ogoal ?? 0) + d.ogoal;
-      p?.assit = (p.assit ?? 0) + d.assit.value;
-      p?.win = (p.win ?? 0) + (getWin(m, d) == 1 ? 1 : 0);
-      p?.lost = (p.lost ?? 0) + (getWin(m, d) == -1 ? 1 : 0);
-      p?.elo = (p.elo ?? 0) + getElo(m, d);
-      p?.match = p.match.value + 1;
+      if (d.isGH != 1) {
+        final p = realm.find<PlayerDB>(d.pid);
+        p?.goal = (p.goal ?? 0) + d.goal;
+        p?.ogoal = (p.ogoal ?? 0) + d.ogoal;
+        p?.assit = (p.assit ?? 0) + d.assit.value;
+        p?.win = (p.win ?? 0) + (getWin(m, d) == 1 ? 1 : 0);
+        p?.lost = (p.lost ?? 0) + (getWin(m, d) == -1 ? 1 : 0);
+        p?.elo = (p.elo ?? 0) + getElo(m, d);
+        p?.match = p.match.value + 1;
+      }
       m.details.add(d);
     });
   }
@@ -183,14 +200,16 @@ class MatchDBLocal {
       for (var d in details) {
         d.win = getWin(m, d);
         d.elo = getElo(m, d);
-        final p = realm.find<PlayerDB>(d.pid);
-        p?.goal = (p.goal ?? 0) + d.goal;
-        p?.ogoal = (p.ogoal ?? 0) + d.ogoal;
-        p?.assit = (p.assit ?? 0) + d.assit.value;
-        p?.win = (p.win ?? 0) + (getWin(m, d) == 1 ? 1 : 0);
-        p?.lost = (p.lost ?? 0) + (getWin(m, d) == -1 ? 1 : 0);
-        p?.elo = (p.elo ?? 0) + getElo(m, d);
-        p?.match = p.match.value + 1;
+        if (d.isGH != 1) {
+          final p = realm.find<PlayerDB>(d.pid);
+          p?.goal = (p.goal ?? 0) + d.goal;
+          p?.ogoal = (p.ogoal ?? 0) + d.ogoal;
+          p?.assit = (p.assit ?? 0) + d.assit.value;
+          p?.win = (p.win ?? 0) + (getWin(m, d) == 1 ? 1 : 0);
+          p?.lost = (p.lost ?? 0) + (getWin(m, d) == -1 ? 1 : 0);
+          p?.elo = (p.elo ?? 0) + getElo(m, d);
+          p?.match = p.match.value + 1;
+        }
         m.details.add(d);
       }
     });

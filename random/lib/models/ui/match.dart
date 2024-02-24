@@ -10,12 +10,14 @@ class Match {
   int goal1;
   int goal2;
   List<MatchDetail> details = [];
+  int? isGH;
   Match({
     required this.id,
     required this.date,
     required this.goal1,
     required this.goal2,
     required this.details,
+    required this.isGH,
   });
 
   Map<String, dynamic> toMap() {
@@ -24,6 +26,7 @@ class Match {
       'date': date,
       'goal1': goal1,
       'goal2': goal2,
+      'isGH': isGH,
       'details': details.map((x) => x.toMap()).toList(),
     };
   }
@@ -33,10 +36,10 @@ class Match {
   factory Match.fromJson(String source) => Match.fromMap(json.decode(source) as Map<String, dynamic>);
 
   factory Match.fromDb(MatchDB p) {
-    return Match(id: p.id, date: p.date, goal1: p.goal1, goal2: p.goal2, details: p.details.map((e) => MatchDetail.fromDb(e)).toList());
+    return Match(id: p.id, date: p.date, goal1: p.goal1, goal2: p.goal2, details: p.details.map((e) => MatchDetail.fromDb(e)).toList(), isGH: p.isGH);
   }
   MatchDB toDB() {
-    return MatchDB(id, date, goal1, goal2, details: details.map((e) => e.toDB()));
+    return MatchDB(id, date, goal1, goal2, details: details.map((e) => e.toDB()), isGH: isGH ?? 0);
   }
 
   factory Match.fromMap(Map<String, dynamic> map) {
@@ -45,6 +48,7 @@ class Match {
       date: map['date'] as String,
       goal1: map['goal1'] as int,
       goal2: map['goal2'] as int,
+      isGH: map['isGH'] as int?,
       details: List<MatchDetail>.from(
         (map['details'] as List<dynamic>).map<MatchDetail>(
           (x) => MatchDetail.fromMap(x as Map<String, dynamic>),
@@ -66,6 +70,7 @@ class MatchDetail {
   int team; //1,2
   int? win; //1,0,-1
   String date;
+  int? isGH = 0;
   MatchDetail({
     required this.id,
     required this.mid,
@@ -78,6 +83,7 @@ class MatchDetail {
     required this.team,
     this.win,
     required this.date,
+    required this.isGH,
   });
 
   Map<String, dynamic> toMap() {
@@ -93,6 +99,7 @@ class MatchDetail {
       'team': team,
       'win': win,
       'date': date,
+      'isGH': isGH,
     };
   }
 
@@ -109,6 +116,7 @@ class MatchDetail {
       team: map['team'] as int,
       win: map['win'] != null ? map['win'] as int : null,
       date: map['date'] as String,
+      isGH: map['isGH'] as int?,
     );
   }
 
@@ -116,9 +124,9 @@ class MatchDetail {
 
   factory MatchDetail.fromJson(String source) => MatchDetail.fromMap(json.decode(source) as Map<String, dynamic>);
   factory MatchDetail.fromDb(MatchDetailDB p) {
-    return MatchDetail(id: p.id, mid: p.mid, pid: p.pid, pName: p.pName, goal: p.goal, ogoal: p.ogoal, elo: p.elo, team: p.team, date: p.date, assit: p.assit, win: p.win);
+    return MatchDetail(id: p.id, mid: p.mid, pid: p.pid, pName: p.pName, goal: p.goal, ogoal: p.ogoal, elo: p.elo, team: p.team, date: p.date, assit: p.assit, win: p.win, isGH: p.isGH ?? 0);
   }
   MatchDetailDB toDB() {
-    return MatchDetailDB(id, mid, pid, pName, goal, ogoal, elo, team, date, assit: assit, win: win);
+    return MatchDetailDB(id, mid, pid, pName, goal, ogoal, elo, team, date, assit: assit, win: win, isGH: isGH ?? 0);
   }
 }

@@ -83,6 +83,7 @@ class AddMatchView extends StatelessWidget {
                           ),
                         )),
                     Container(height: 30),
+                    Obx(() => Switch(value: controller.isGH.value, onChanged: controller.onChanged)),
                     TextButton(
                         onPressed: () {
                           controller.onClickDelete();

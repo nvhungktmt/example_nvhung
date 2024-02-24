@@ -20,6 +20,7 @@ class AddMatchController extends GetxController with ShareMixin {
   final goal2 = 0.obs;
   final ogoal = 0.obs;
   final assit = 0.obs;
+  final isGH = false.obs;
   AddMatchController({
     required this.state,
   });
@@ -31,6 +32,8 @@ class AddMatchController extends GetxController with ShareMixin {
     t2.value = state.t2;
     goal1.value = state.match.goal1;
     goal2.value = state.match.goal2;
+    isGH.value = state.match.isGH == 1;
+    date.value = state.match.date.asDate ?? DateTime.now();
   }
 
   void onSave() {
@@ -47,7 +50,7 @@ class AddMatchController extends GetxController with ShareMixin {
           state.match.date = date.value.toIso8601String();
           state.match.details.addAll(addDetails);
         });
-        MatchDBLocal.shared.update(state.match);
+        MatchDBLocal.shared.update(state.match, isGH.value ? 1 : 0);
       }
       Get.back();
     } catch (e) {
@@ -219,7 +222,7 @@ class AddMatchController extends GetxController with ShareMixin {
         p?.ogoal = (p.ogoal ?? 0) - og + e.ogoal;
         p?.assit = (p.assit ?? 0) - as + e.assit.value;
       });
-      MatchDBLocal.shared.update(state.match);
+      MatchDBLocal.shared.update(state.match, isGH.value ? 1 : 0);
       goal1.value = t1.fold<int>(0, (previousValue, element) => previousValue + element.goal) + t2.fold(0, (previousValue, element) => previousValue + element.ogoal);
       goal2.value = t2.fold<int>(0, (previousValue, element) => previousValue + element.goal) + t1.fold(0, (previousValue, element) => previousValue + element.ogoal);
     } else {
@@ -243,7 +246,7 @@ class AddMatchController extends GetxController with ShareMixin {
 
       // state.match.details.remove(e);
       MatchDBLocal.shared.deleteDetail(d, state.match);
-      MatchDBLocal.shared.update(state.match);
+      MatchDBLocal.shared.update(state.match, isGH.value ? 1 : 0);
     } else {
       if (d.team == 1) {
         t1.remove(d);
@@ -251,6 +254,10 @@ class AddMatchController extends GetxController with ShareMixin {
         t2.remove(d);
       }
     }
+  }
+
+  void onChanged(bool value) {
+    isGH.value = value;
   }
 }
 

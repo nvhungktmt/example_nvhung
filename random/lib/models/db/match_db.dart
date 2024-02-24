@@ -12,6 +12,7 @@ class _MatchDB {
   late String date;
   late int goal1;
   late int goal2;
+  int? isGH = 0; // Giao huu
   List<_MatchDetailDB> details = [];
 }
 
@@ -21,6 +22,7 @@ class _MatchDetailDB {
   late int id;
   late int mid;
   late int pid;
+  int? isGH = 0; // Giao huu
   late String pName;
   late int goal;
   late int ogoal;
