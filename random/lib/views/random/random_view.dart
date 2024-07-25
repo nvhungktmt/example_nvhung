@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
-import 'package:random/views/random/item_random_view.dart';
-import 'package:random/views/random/random_controller.dart';
+import 'package:match_manager/views/random/item_random_view.dart';
+import 'package:match_manager/views/random/random_controller.dart';
 
 class RandomView extends StatelessWidget {
   const RandomView({Key? key}) : super(key: key);

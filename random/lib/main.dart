@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:random/local/match_local.dart';
-import 'package:random/local/player_local.dart';
-import 'package:random/random_list.dart';
-import 'package:random/views/home_view.dart';
+import 'package:match_manager/local/match_local.dart';
+import 'package:match_manager/local/player_local.dart';
+import 'package:match_manager/random_list.dart';
+import 'package:match_manager/views/home_view.dart';
 
 void main() {
   runApp(GetMaterialApp(initialRoute: '/home', getPages: [

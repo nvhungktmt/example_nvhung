@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:random/commons/app_card.dart';
-import 'package:random/commons/app_color.dart';
-import 'package:random/commons/app_styles.dart';
-import 'package:random/commons/num_extension.dart';
-import 'package:random/views/player/details/player_detail_view.dart';
-import 'package:random/views/ranking/rank_list_controller.dart';
+import 'package:match_manager/commons/app_card.dart';
+import 'package:match_manager/commons/app_color.dart';
+import 'package:match_manager/commons/app_styles.dart';
+import 'package:match_manager/commons/num_extension.dart';
+import 'package:match_manager/views/player/details/player_detail_view.dart';
+import 'package:match_manager/views/ranking/rank_list_controller.dart';
 
 class RankListView extends StatelessWidget {
   const RankListView({Key? key}) : super(key: key);

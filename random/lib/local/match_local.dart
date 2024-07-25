@@ -1,9 +1,9 @@
 import 'package:flutter/src/widgets/editable_text.dart';
-import 'package:random/commons/num_extension.dart';
-import 'package:random/models/db/match_db.dart';
-import 'package:random/models/db/player_db.dart';
-import 'package:random/models/ui/match.dart';
-import 'package:random/models/ui/player.dart';
+import 'package:match_manager/commons/num_extension.dart';
+import 'package:match_manager/models/db/match_db.dart';
+import 'package:match_manager/models/db/player_db.dart';
+import 'package:match_manager/models/ui/match.dart';
+import 'package:match_manager/models/ui/player.dart';
 import 'package:realm/realm.dart';
 
 class MatchDBLocal {

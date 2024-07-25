@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:random/commons/app_styles.dart';
-import 'package:random/models/db/player_db.dart';
-import 'package:random/views/select_player/select_player_view.dart';
+import 'package:match_manager/commons/app_styles.dart';
+import 'package:match_manager/models/db/player_db.dart';
+import 'package:match_manager/views/select_player/select_player_view.dart';
 
 class ItemRandomView extends StatefulWidget {
   final int? max;

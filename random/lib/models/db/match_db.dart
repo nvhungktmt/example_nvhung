@@ -1,6 +1,6 @@
-import 'package:random/local/match_local.dart';
-import 'package:random/models/db/player_db.dart';
-import 'package:random/models/ui/player.dart';
+import 'package:match_manager/local/match_local.dart';
+import 'package:match_manager/models/db/player_db.dart';
+import 'package:match_manager/models/ui/player.dart';
 import 'package:realm/realm.dart';
 
 part 'match_db.g.dart';

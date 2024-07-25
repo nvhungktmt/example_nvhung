@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:random/local/player_local.dart';
-import 'package:random/models/db/player_db.dart';
-// import 'package:random/commons/num_extension.dart';
+import 'package:match_manager/local/player_local.dart';
+import 'package:match_manager/models/db/player_db.dart';
+// import 'package:match_manager/commons/num_extension.dart';
 
 class SelectPlayerController extends GetxController {
   var players = PlayerDBLocal.shared.alls.obs;

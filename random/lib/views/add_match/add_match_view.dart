@@ -2,13 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:intl/intl.dart';
-import 'package:random/commons/app_card.dart';
-import 'package:random/commons/app_color.dart';
+import 'package:match_manager/commons/app_card.dart';
+import 'package:match_manager/commons/app_color.dart';
 
-import 'package:random/commons/app_styles.dart';
-import 'package:random/models/db/match_db.dart';
-import 'package:random/views/add_match/add_match_controller.dart';
-import 'package:random/views/add_match/add_match_state.dart';
+import 'package:match_manager/commons/app_styles.dart';
+import 'package:match_manager/models/db/match_db.dart';
+import 'package:match_manager/views/add_match/add_match_controller.dart';
+import 'package:match_manager/views/add_match/add_match_state.dart';
 
 class AddMatchView extends StatelessWidget {
   final AddMatchState state;

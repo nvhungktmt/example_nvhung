@@ -4,11 +4,11 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:random/local/player_local.dart';
-import 'package:random/models/db/player_db.dart';
-import 'package:random/commons/num_extension.dart';
+import 'package:match_manager/local/player_local.dart';
+import 'package:match_manager/models/db/player_db.dart';
+import 'package:match_manager/commons/num_extension.dart';
 import 'package:share_plus/share_plus.dart';
-// import 'package:random/commons/num_extension.dart';
+// import 'package:match_manager/commons/num_extension.dart';
 
 class RankListController extends GetxController with ShareMixin {
   var players = <PlayerDB>[].obs;

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:random/commons/num_extension.dart';
-import 'package:random/local/match_local.dart';
-import 'package:random/local/player_local.dart';
-import 'package:random/models/db/match_db.dart';
-import 'package:random/models/db/player_db.dart';
-import 'package:random/views/add_match/add_match_state.dart';
-import 'package:random/views/add_match/add_match_view.dart';
-// import 'package:random/commons/num_extension.dart';
+import 'package:match_manager/commons/num_extension.dart';
+import 'package:match_manager/local/match_local.dart';
+import 'package:match_manager/local/player_local.dart';
+import 'package:match_manager/models/db/match_db.dart';
+import 'package:match_manager/models/db/player_db.dart';
+import 'package:match_manager/views/add_match/add_match_state.dart';
+import 'package:match_manager/views/add_match/add_match_view.dart';
+// import 'package:match_manager/commons/num_extension.dart';
 
 class MatchListController extends GetxController {
   var players = MatchDBLocal.shared.alls.reversed.toList().obs;

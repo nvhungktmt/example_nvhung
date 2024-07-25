@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:random/models/db/match_db.dart';
+import 'package:match_manager/models/db/match_db.dart';
 
 class AddMatchState {
   bool isEdit = true;

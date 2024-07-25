@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:random/commons/app_card.dart';
-import 'package:random/commons/app_color.dart';
-import 'package:random/commons/app_styles.dart';
-import 'package:random/commons/num_extension.dart';
-import 'package:random/local/player_local.dart';
-import 'package:random/models/db/match_db.dart';
-import 'package:random/models/db/player_db.dart';
-import 'package:random/views/match_list/match_list_controller.dart';
-import 'package:random/views/player/player_list_controller.dart';
+import 'package:match_manager/commons/app_card.dart';
+import 'package:match_manager/commons/app_color.dart';
+import 'package:match_manager/commons/app_styles.dart';
+import 'package:match_manager/commons/num_extension.dart';
+import 'package:match_manager/local/player_local.dart';
+import 'package:match_manager/models/db/match_db.dart';
+import 'package:match_manager/models/db/player_db.dart';
+import 'package:match_manager/views/match_list/match_list_controller.dart';
+import 'package:match_manager/views/player/player_list_controller.dart';
 
 class MatchListView extends StatelessWidget {
   const MatchListView({Key? key}) : super(key: key);

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:random/commons/num_extension.dart';
-import 'package:random/models/db/player_db.dart';
+import 'package:match_manager/commons/num_extension.dart';
+import 'package:match_manager/models/db/player_db.dart';
 import 'package:realm/realm.dart';
 
 class PlayerDBLocal {

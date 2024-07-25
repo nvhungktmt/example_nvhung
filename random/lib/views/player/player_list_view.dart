@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:random/commons/app_card.dart';
-import 'package:random/commons/app_color.dart';
-import 'package:random/commons/app_styles.dart';
-import 'package:random/commons/num_extension.dart';
-import 'package:random/local/player_local.dart';
-import 'package:random/models/db/player_db.dart';
-import 'package:random/views/player/details/player_detail_view.dart';
-import 'package:random/views/player/player_list_controller.dart';
+import 'package:match_manager/commons/app_card.dart';
+import 'package:match_manager/commons/app_color.dart';
+import 'package:match_manager/commons/app_styles.dart';
+import 'package:match_manager/commons/num_extension.dart';
+import 'package:match_manager/local/player_local.dart';
+import 'package:match_manager/models/db/player_db.dart';
+import 'package:match_manager/views/player/details/player_detail_view.dart';
+import 'package:match_manager/views/player/player_list_controller.dart';
 
 class PlayerListView extends StatelessWidget {
   const PlayerListView({Key? key}) : super(key: key);
@@ -26,9 +26,9 @@ class PlayerListView extends StatelessWidget {
             actions: [
               IconButton(
                   onPressed: () {
-                    controller.onAdd(context);
+                    controller.onFilter(context);
                   },
-                  icon: const Icon(Icons.add_circle))
+                  icon: const Icon(Icons.filter_alt_rounded))
             ],
           ),
           body: Obx(() => ListView.separated(
@@ -126,6 +126,11 @@ class PlayerListView extends StatelessWidget {
               },
               separatorBuilder: (c, i) => Container(height: 1),
               itemCount: controller.players.value.length)),
+          floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                controller.onAdd(context);
+              },
+              child: const Icon(Icons.add)),
         );
       },
     );

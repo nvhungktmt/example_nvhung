@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:random/commons/num_extension.dart';
-import 'package:random/local/match_local.dart';
-import 'package:random/local/player_local.dart';
-import 'package:random/models/db/match_db.dart';
-import 'package:random/models/db/player_db.dart';
-// import 'package:random/commons/num_extension.dart';
+import 'package:match_manager/commons/num_extension.dart';
+import 'package:match_manager/local/match_local.dart';
+import 'package:match_manager/local/player_local.dart';
+import 'package:match_manager/models/db/match_db.dart';
+import 'package:match_manager/models/db/player_db.dart';
+// import 'package:match_manager/commons/num_extension.dart';
 
 class PlayerListController extends GetxController {
   var players = PlayerDBLocal.shared.alls.obs;
-
+  var isGH = false.obs;
+  var filterType = 0.obs;
   void onAdd(BuildContext context) {
     final name = TextEditingController();
     final elo = TextEditingController();
@@ -47,8 +48,25 @@ class PlayerListController extends GetxController {
 
   void reloadData() {
     final allPlayer = PlayerDBLocal.shared.alls;
-
-    players.value = allPlayer;
+    if (filterType.value == 0 && isGH.value == false) {
+      players.value = allPlayer;
+    } else {
+      for (var p in allPlayer) {
+        var details = MatchDBLocal.shared.realm.query<MatchDetailDB>(r'pid == $0', [p.id]).toList();
+        details = details.where((element) => element.isGH == (isGH.value ? 1 : 0)).toList();
+        details = filterType.value == 1
+            ? details.where((element) => DateTime.parse(element.date).year == DateTime.now().year).toList()
+            : filterType.value == 2
+                ? details.where((element) => DateTime.parse(element.date).year == DateTime.now().year - 1).toList()
+                : details;
+        p.goal = details.fold(0, (previousValue, element) => previousValue.value + element.goal);
+        p.elo = 300 + (details.fold(0, (previousValue, element) => previousValue.value + element.elo));
+        p.match = details.length;
+        p.win = details.where((element) => element.win == 1).length;
+        p.lost = details.where((element) => element.win == -1).length;
+        players.value = allPlayer;
+      }
+    }
   }
 
   void onEdit(PlayerDB item) {
@@ -78,5 +96,57 @@ class PlayerListController extends GetxController {
                 ],
               ),
             ));
+  }
+
+  void onFilter(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Obx(() => Container(
+              child: Wrap(
+                children: <Widget>[
+                  CheckboxListTile(
+                    title: Text('isGH'),
+                    value: isGH.value,
+                    onChanged: (newValue) {
+                      isGH.value = newValue ?? false;
+                      reloadData();
+                    },
+                  ),
+                  ListTile(
+                    leading: filterType.value == 0 ? Icon(Icons.radio_button_checked_rounded) : Icon(Icons.radio_button_off),
+                    title: Text('All'),
+                    onTap: () {
+                      filterType.value = 0;
+                      reloadData();
+                      // Add your filtering logic here for "All"
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  ListTile(
+                    leading: filterType.value == 1 ? Icon(Icons.radio_button_checked_rounded) : Icon(Icons.radio_button_off),
+                    title: Text('This Year'),
+                    onTap: () {
+                      filterType.value = 1;
+                      reloadData();
+                      // Add your filtering logic here for "This Year"
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  ListTile(
+                    leading: filterType.value == 2 ? Icon(Icons.radio_button_checked_rounded) : Icon(Icons.radio_button_off),
+                    title: Text('Last Year'),
+                    onTap: () {
+                      filterType.value = 2;
+                      reloadData();
+                      // Add your filtering logic here for "Last Year"
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ));
+      },
+    );
   }
 }

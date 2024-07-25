@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:random/local/match_local.dart';
-import 'package:random/local/player_local.dart';
-import 'package:random/models/ui/match.dart';
-import 'package:random/models/ui/player.dart';
+import 'package:match_manager/local/match_local.dart';
+import 'package:match_manager/local/player_local.dart';
+import 'package:match_manager/models/ui/match.dart';
+import 'package:match_manager/models/ui/player.dart';
 
 import 'firebase_config.dart';
 

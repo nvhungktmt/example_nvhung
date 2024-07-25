@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:random/models/db/player_db.dart';
+import 'package:match_manager/models/db/player_db.dart';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class Player {

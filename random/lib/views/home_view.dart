@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:random/views/match_list/match_list_view.dart';
-import 'package:random/views/mores/more_view.dart';
-import 'package:random/views/player/player_list_view.dart';
-import 'package:random/views/random/random_view.dart';
-import 'package:random/views/ranking/rank_list_view.dart';
-import 'package:random/views/select_player/select_player_view.dart';
+import 'package:match_manager/views/match_list/match_list_view.dart';
+import 'package:match_manager/views/mores/more_view.dart';
+import 'package:match_manager/views/player/player_list_view.dart';
+import 'package:match_manager/views/random/random_view.dart';
+import 'package:match_manager/views/ranking/rank_list_view.dart';
+import 'package:match_manager/views/select_player/select_player_view.dart';
 
 /// Flutter code sample for [TabBar].
 
